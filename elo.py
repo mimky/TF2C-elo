@@ -168,13 +168,11 @@ def get_stats(lobbylink):
     try:
         #blue_winrate = round(100*(sum(blue_winrate_raw)/6 / total_winrate)) divides total winrate by 6
         blue_winrate = round(100*(sum(blue_winrate_raw)/len(blue_winrate_raw) / total_winrate)) #divides by player count
-        print(blue_winrate, blue_winrate_raw)
     except ZeroDivisionError:
         blue_winrate = 0
     try:
         #red_winrate = round(100*(sum(red_winrate_raw)/6 / total_winrate)) same thing here
         red_winrate = round(100*(sum(red_winrate_raw)/len(red_winrate_raw) / total_winrate))
-        print(red_winrate, red_winrate_raw)
     except ZeroDivisionError:
         red_winrate = 0
 
