@@ -9,6 +9,7 @@ Can be used to determine which team to play on. Simply paste the raw lobby link
 `https://tf2center.com/lobbies/xxxxxxx`
 
 into the command line. The program will do the rest.
+The same lobby can be calculated multiple times without having to paste the link again, just press enter. Other lobbies can be calculated as well in the same instance of the script. Simply paste the new lobby link in.
 
 ## Requirements
 [Python 3.x](https://www.python.org/downloads/)
