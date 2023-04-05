@@ -162,9 +162,11 @@ def get_stats(lobbylink):
             if 'Red' in i and stats[1] != '???':
                 red_winrate_raw.append(stats[1])
 
-
-    #total_winrate = sum(blue_winrate_raw)/6 + sum(red_winrate_raw)/6 calculates by dividing by 6
-    total_winrate = sum(blue_winrate_raw)/len(blue_winrate_raw) + sum(red_winrate_raw)/len(red_winrate_raw) #divides by player count
+    try:
+        #total_winrate = sum(blue_winrate_raw)/6 + sum(red_winrate_raw)/6 calculates by dividing by 6
+        total_winrate = sum(blue_winrate_raw)/len(blue_winrate_raw) + sum(red_winrate_raw)/len(red_winrate_raw) #divides by player count
+    except ZeroDivisionError:
+        total_winrate = 100
     try:
         #blue_winrate = round(100*(sum(blue_winrate_raw)/6 / total_winrate)) divides total winrate by 6
         blue_winrate = round(100*(sum(blue_winrate_raw)/len(blue_winrate_raw) / total_winrate)) #divides by player count
