@@ -117,6 +117,7 @@ def get_stats(lobbylink):
         mercenary_needed = (slot_conversion[i])[1]
         outcomes = []
 
+        lobbies_played = 0
         for e in tf2c_lobbies:
             mercenary_played = (re.compile('''alt="''' + r'(.*?)' + '''"''', re.DOTALL)).search(e).group(1)
             if mercenary_played != mercenary_needed: #filters out correct class
@@ -137,13 +138,14 @@ def get_stats(lobbylink):
                 outcomes.append(0)
             if outcome == 't':
                 outcomes.append(0.5)
+            lobbies_played += 1
 
         if not outcomes:
-            winrate = '???'
+            winrate = '??? (0)'
         else:
-            winrate = round((sum(outcomes)/len(outcomes))*100)
+            winrate = str(round((sum(outcomes)/len(outcomes))*100)) + '% (' + str(lobbies_played) + ')'
 
-        winrate_dict[(slot_conversion[i])[0] + ' ' + (slot_conversion[i])[1]] = [(slots[i])[1], winrate] #format is 'Team Class': [playername, win% int]
+        winrate_dict[(slot_conversion[i])[0] + ' ' + (slot_conversion[i])[1]] = [(slots[i])[1], winrate] #format is 'Team Class': [playername, win% & (lobbies played)]
         return
 
 
@@ -157,10 +159,10 @@ def get_stats(lobbylink):
     for i in winrate_dict:
         stats = winrate_dict[i]
         if stats: #checks if player exists in slot
-            if 'Blue' in i and stats[1] != '???': #filters team & inconclusive elo
-                blue_winrate_raw.append(stats[1])
-            if 'Red' in i and stats[1] != '???':
-                red_winrate_raw.append(stats[1])
+            if 'Blue' in i and stats[1] != '??? (0)': #filters team & inconclusive elo
+                blue_winrate_raw.append(int((stats[1]).split('%', 1)[0]))
+            if 'Red' in i and stats[1] != '??? (0)':
+                red_winrate_raw.append(int((stats[1]).split('%', 1)[0]))
 
     try:
         #total_winrate = sum(blue_winrate_raw)/6 + sum(red_winrate_raw)/6 calculates by dividing by 6
@@ -199,7 +201,7 @@ def get_stats(lobbylink):
         try:
             if type((winrate_dict[i])[1]) == int: #if winrate calculated
                 printable_wd1[i] = [(winrate_dict[i])[0], str((winrate_dict[i])[1])+'%']
-            else: #if winrate unknown (???)
+            else: #if winrate unknown (??? (0))
                 printable_wd1[i] = winrate_dict[i] 
         except IndexError: #if no player
             printable_wd1[i] = ['', '']
@@ -214,8 +216,8 @@ def get_stats(lobbylink):
             if not (printable_wd1[i])[0]: #if no player
                 printable_wd2[i] = printable_wd1[i]
             else:
-                if (printable_wd1[i])[1] == '???':
-                    printable_wd2[i] = [fg.lightblue + (printable_wd1[i])[0] + fg.rs, fg.yellow + '???' + fg.rs]
+                if (printable_wd1[i])[1] == '??? (0)':
+                    printable_wd2[i] = [fg.lightblue + (printable_wd1[i])[0] + fg.rs, fg.yellow + '??? (0)' + fg.rs]
                 else:
                     printable_wd2[i] = [fg.lightblue + (printable_wd1[i])[0] + fg.rs, fg.pink + (printable_wd1[i])[1] + fg.rs]
                     
@@ -223,8 +225,8 @@ def get_stats(lobbylink):
             if not (printable_wd1[i])[0]:
                 printable_wd2[i] = printable_wd1[i]
             else:
-                if (printable_wd1[i])[1] == '???':
-                    printable_wd2[i] = [fg.lightred + (printable_wd1[i])[0] + fg.rs, fg.yellow + '???' + fg.rs]
+                if (printable_wd1[i])[1] == '??? (0)':
+                    printable_wd2[i] = [fg.lightred + (printable_wd1[i])[0] + fg.rs, fg.yellow + '??? (0)' + fg.rs]
                 else:
                     printable_wd2[i] = [fg.lightred + (printable_wd1[i])[0] + fg.rs, fg.pink + (printable_wd1[i])[1] + fg.rs]
         counter += 1
