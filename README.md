@@ -1,8 +1,9 @@
 # TF2C-elo
 Calculates winrate for each player added up in given tf2c lobby. 
 Different stats for each class, pulls data from player's trends.tf profile.
-Only takes into account recent lobbies played. Anything from >3 months ago will likely not be calculated.
-Once calculated, it compares the average winrates of both teams to predict who will win.
+Only takes into account the first two pages of a player's logs on trends.tf. (Usually ~6 months)
+Once calculated, it compares the average winrates of both teams to predict who will win. 
+The number you see in parenthesis next to the winrate represents how many TF2C logs it's pulling from.
 ## Usage
 Can be used to determine which team to play on. Simply paste the raw lobby link
 
