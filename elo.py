@@ -117,8 +117,10 @@ def get_stats(lobbylink):
         if not slots[i]:
             return
         ID = (slots[i])[0]
-        trends_html = requests.get('''https://trends.tf/player/''' + ID + '''/logs''').text
-        tf2c_lobbies = trends_html.split('''TF2Center Lobby ''')[1:]
+        trends_html = (requests.get('''https://trends.tf/player/''' + ID + '''/logs''').text).split('''TF2Center Lobby ''')[1:]
+        trends_html2 = (requests.get('''https://trends.tf/player/''' + ID + '''/logs?limit=100&offset=100''').text).split('''TF2Center Lobby ''')[1:]
+        tf2c_lobbies = trends_html + trends_html2
+        
         mercenary_needed = (slot_conversion[i])[1]
         outcomes = []
 
