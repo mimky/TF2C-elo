@@ -89,6 +89,11 @@ def get_stats(lobbylink):
             continue
         if '''<span class="icons ''' in name:
             name = re.sub(r'^.*?\n', '', name)
+        if '''__cf_email__''' in name:
+            #grabs user's name in case of an @ symbol, which breaks the page source and makes it think it's an email
+            email_fix = re.compile('''{"steamId":"''' + steamID + '''","playerName":"''' + r'(.*?)' + '''"}''', re.DOTALL)
+            name = email_fix.search(rawhtml).group(1)
+            
         slots[counter] = [steamID, name]
         
         counter += (empty+1)
@@ -112,9 +117,8 @@ def get_stats(lobbylink):
         if not slots[i]:
             return
         ID = (slots[i])[0]
-        trends_html = (requests.get('''https://trends.tf/player/''' + ID + '''/logs''').text).split('''TF2Center Lobby ''')[1:]
-        trends_html2 = (requests.get('''https://trends.tf/player/''' + ID + '''/logs?limit=100&offset=100''').text).split('''TF2Center Lobby ''')[1:]
-        tf2c_lobbies = trends_html + trends_html2
+        trends_html = requests.get('''https://trends.tf/player/''' + ID + '''/logs''').text
+        tf2c_lobbies = trends_html.split('''TF2Center Lobby ''')[1:]
         mercenary_needed = (slot_conversion[i])[1]
         outcomes = []
 
