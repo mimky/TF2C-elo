@@ -9,21 +9,19 @@ from sty import Style, RgbFg
 from prettytable import PrettyTable
 os.system('cls')
 
-def start_gui(last_link):
-    lobbylink = input('Lobby Link: ')
-    if not lobbylink and last_link:
-        get_stats(last_link)
-    else:
-        get_stats(lobbylink)
+def start_gui():
+    lobbylink = input('Press Enter to Scan.\n> ')
+    get_stats()
 
-
-def get_stats(lobbylink):
+def get_stats():
     try:
-        rawhtml_inp = requests.get(lobbylink).text
-    except:
-        print('Wrong format.\nExample: https://tf2center.com/lobbies/xxxxxxx\n')
-        start_gui(False)
+        f = open('html.txt', "r")
+    except FileNotFoundError:
+        print('html.txt not found in current file directory. See README.md for more info.\n')
+        start_gui()
         return
+    rawhtml_inp = f.read()
+    f.close()
     
     rawhtml_inp = rawhtml_inp.replace('\t', '')
     rawhtml_inp = rawhtml_inp.replace('\r', '')
@@ -43,8 +41,9 @@ def get_stats(lobbylink):
         v2 = v1.search(rawhtml).group(1)
         v3 = (v2.split('''<div class="details">''')) #splits v1 into players
     except AttributeError:
-        print('Invalid Lobby.\n\n')
-        start_gui(False)
+        print('Invalid Lobby. Make sure that html.txt contains the full page source from an existing TF2C lobby.\n')
+        start_gui()
+
 
     slots = {
     1: '',
@@ -79,7 +78,8 @@ def get_stats(lobbylink):
     for i in v3:
         if counter > 12:
             break
-        empty = i.count('''<span class="slotIconInner icons slot unavailable"></span>''') #checks to see how many spots are taken after player's slot
+        empty = (i.count('''class="ym-gl playerSlot lobbySlot empty"''') + i.count('''class="ym-gl playerSlot lobbySlot available restricted"''')) 
+        #checks to see how many spots are taken after player's slot
             
         try:
             name = html.unescape((re.compile('''<i>\n''' + r'(.*?)' + '''\n</i>''', re.DOTALL)).search(i).group(1)) #HTML library used for unicode characters
@@ -248,6 +248,6 @@ def get_stats(lobbylink):
     stat_table.add_row([(printable_wd2['Blue Medic'])[0], (printable_wd2['Blue Medic'])[1], 'Medic', (printable_wd2['Red Medic'])[0], (printable_wd2['Red Medic'])[1]])
     print(stat_table)
     
-    start_gui(lobbylink)
+    start_gui()
 
-start_gui(False)
+start_gui()
