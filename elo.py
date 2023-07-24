@@ -15,7 +15,7 @@ def start_gui():
 
 def get_stats():
     try:
-        f = open('html.txt', "r")
+        f = open('html.txt', "r", encoding='utf8')
     except FileNotFoundError:
         print('html.txt not found in current file directory. See README.md for more info.\n')
         start_gui()
@@ -78,7 +78,7 @@ def get_stats():
     for i in v3:
         if counter > 12:
             break
-        empty = (i.count('''class="ym-gl playerSlot lobbySlot empty"''') + i.count('''class="ym-gl playerSlot lobbySlot available restricted"''')) 
+        empty = i.count('''class="ym-gl playerSlot lobbySlot empty"''') + i.count('''class="ym-gl playerSlot lobbySlot available restricted"''') + i.count(''' lobbySlot reserved"''')
         #checks to see how many spots are taken after player's slot
             
         try:
